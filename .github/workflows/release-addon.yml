@@ -54,7 +54,25 @@ jobs:
             exit 1
           fi
 
+      - name: Check if version needs updating
+        id: version_check
+        run: |
+          VERSION="${{ github.event.inputs.version }}"
+          CURRENT_VERSION=$(grep "version:" config.yaml | cut -d'"' -f2)
+          
+          echo "Current version: $CURRENT_VERSION"
+          echo "Target version: $VERSION"
+          
+          if [ "$CURRENT_VERSION" = "$VERSION" ]; then
+            echo "Version is already $VERSION, no update needed"
+            echo "needs_update=false" >> $GITHUB_OUTPUT
+          else
+            echo "Version needs to be updated from $CURRENT_VERSION to $VERSION"
+            echo "needs_update=true" >> $GITHUB_OUTPUT
+          fi
+
       - name: Update addon configuration
+        if: steps.version_check.outputs.needs_update == 'true'
         run: |
           VERSION="${{ github.event.inputs.version }}"
           
@@ -72,14 +90,16 @@ jobs:
           
           git config --local user.email "action@github.com"
           git config --local user.name "Release Action"
-          git add config.yaml
-          git commit -m "Release version $VERSION"
           
-          # Create tag
+          # Only commit if there are changes
+          if [ "${{ steps.version_check.outputs.needs_update }}" = "true" ]; then
+            git add config.yaml
+            git commit -m "Release version $VERSION"
+            git push
+          fi
+          
+          # Create tag (even if no config changes)
           git tag "v$VERSION"
-          
-          # Push both commit and tag
-          git push
           git push origin "v$VERSION"
           
           echo "Created and pushed tag v$VERSION"
