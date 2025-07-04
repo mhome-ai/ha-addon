@@ -11,6 +11,7 @@ arch:
   - i386
 startup: application
 boot: auto
+auto_update: true
 ports:
   8080/tcp: null
 map:

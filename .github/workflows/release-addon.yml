@@ -1,0 +1,93 @@
+name: Release Addon
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g., 0.2.0)'
+        required: true
+        type: string
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate version format
+        run: |
+          VERSION="${{ github.event.inputs.version }}"
+          if [[ ! $VERSION =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Error: Version must be in format X.Y.Z (e.g., 0.2.0)"
+            exit 1
+          fi
+          echo "Version format is valid: $VERSION"
+
+      - name: Check if version already exists
+        run: |
+          VERSION="${{ github.event.inputs.version }}"
+          if git rev-parse "v$VERSION" >/dev/null 2>&1; then
+            echo "Error: Version v$VERSION already exists"
+            exit 1
+          fi
+          echo "Version v$VERSION is available"
+
+      - name: Verify Docker image exists
+        run: |
+          VERSION="${{ github.event.inputs.version }}"
+          
+          echo "Checking if Docker image exists for version $VERSION..."
+          
+          # Check if image exists in registry
+          if docker manifest inspect ghcr.io/mhome-ai/ha-addon:$VERSION >/dev/null 2>&1; then
+            echo "✅ Docker image ghcr.io/mhome-ai/ha-addon:$VERSION is available"
+          else
+            echo "❌ Error: Docker image ghcr.io/mhome-ai/ha-addon:$VERSION not found"
+            echo "Please ensure the image is built and pushed before releasing"
+            exit 1
+          fi
+
+      - name: Update addon configuration
+        run: |
+          VERSION="${{ github.event.inputs.version }}"
+          
+          # Update version in config.yaml
+          sed -i "s/version: \".*\"/version: \"$VERSION\"/" config.yaml
+          
+          # Verify the change
+          grep "version:" config.yaml
+          
+          echo "Updated addon configuration to version $VERSION"
+
+      - name: Commit version update and create tag
+        run: |
+          VERSION="${{ github.event.inputs.version }}"
+          
+          git config --local user.email "action@github.com"
+          git config --local user.name "Release Action"
+          git add config.yaml
+          git commit -m "Release version $VERSION"
+          
+          # Create tag
+          git tag "v$VERSION"
+          
+          # Push both commit and tag
+          git push
+          git push origin "v$VERSION"
+          
+          echo "Created and pushed tag v$VERSION"
+
+      - name: Summary
+        run: |
+          VERSION="${{ github.event.inputs.version }}"
+          echo "✅ Successfully updated mHome addon to version $VERSION"
+          echo "🐳 Docker image: ghcr.io/mhome-ai/ha-addon:$VERSION"
+          echo "📦 Git tag: v$VERSION"
+          echo "🏠 Home Assistant users will see the update available in the Add-on Store" 
