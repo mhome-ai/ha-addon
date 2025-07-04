@@ -1,0 +1,19 @@
+name: "mHome"
+description: "mHome Hub integration addon for Home Assistant"
+version: "0.1.0"
+slug: "mhome"
+init: false
+arch:
+  - armhf
+  - armv7
+  - aarch64
+  - amd64
+  - i386
+startup: application
+boot: auto
+ports:
+  8080/tcp: null
+map:
+  - "share:rw"
+  - "ssl"
+image: "ghcr.io/mhome-ai/ha-addon:{version}" 
