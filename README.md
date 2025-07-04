@@ -1,5 +1,9 @@
 # mHome - Home Assistant Add-on
 
+<p align="center">
+  <img src="logo.png" alt="mHome Logo" width="200">
+</p>
+
 ![Supports aarch64 Architecture][aarch64-shield]
 ![Supports amd64 Architecture][amd64-shield]
 ![Supports armhf Architecture][armhf-shield]
@@ -20,7 +24,11 @@ This add-on bridges your local Home Assistant installation with the mHome cloud 
 
 ## Installation
 
-### Method 1: Add Repository
+### Method 1: One-Click Installation
+
+[![Open your Home Assistant instance and show the add add-on repository dialog with a specific repository URL pre-filled.](https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg)](https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Fmhome-ai%2Fha-addon)
+
+### Method 2: Manual Installation
 
 1. Navigate to **Settings** > **Add-ons** > **Add-on Store** in Home Assistant
 2. Click the **⋮** menu in the top right corner and select **Repositories**
