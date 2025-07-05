@@ -20,6 +20,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          # Personal access token with access to the private repository
+          token: ${{ secrets.SOURCE_REPO_PAT }}
 
       - name: Validate version format
         run: |
@@ -65,6 +67,8 @@ jobs:
           # Fetch the tag that matches the version we are releasing
           ref: "refs/tags/v${{ github.event.inputs.version }}"
           path: core
+          # Personal access token with access to the private repository
+          token: ${{ secrets.SOURCE_REPO_PAT }}
 
       - name: Copy CHANGELOG into add-on folder
         run: |
