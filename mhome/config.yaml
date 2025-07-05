@@ -18,5 +18,4 @@ map:
 image: "ghcr.io/mhome-ai/ha-addon"
 ingress: true
 ingress_port: 9104
-panel_icon: mdi:puzzle
 panel_title: mHome 
