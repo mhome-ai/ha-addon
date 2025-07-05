@@ -54,6 +54,23 @@ jobs:
             exit 1
           fi
 
+      # -------------------------------------------------------------------
+      # Bring in the canonical CHANGELOG from the source code repository
+      # -------------------------------------------------------------------
+      - name: Checkout source repository for changelog
+        uses: actions/checkout@v4
+        with:
+          # Repository that contains the authoritative CHANGELOG.md
+          repository: mhome-ai/home-assistant-addon  # <-- adjust if repo name differs
+          # Fetch the tag that matches the version we are releasing
+          ref: "refs/tags/v${{ github.event.inputs.version }}"
+          path: core
+
+      - name: Copy CHANGELOG into add-on folder
+        run: |
+          cp core/CHANGELOG.md mhome/CHANGELOG.md
+          echo "CHANGELOG synced from source repository"
+
       - name: Check if version needs updating
         id: version_check
         run: |
@@ -92,8 +109,8 @@ jobs:
           git config --local user.name "Release Action"
           
           # Only commit if there are changes
-          if [ "${{ steps.version_check.outputs.needs_update }}" = "true" ]; then
-            git add mhome/config.yaml
+          if git status --porcelain | grep -qE "mhome/config.yaml|mhome/CHANGELOG.md"; then
+            git add mhome/config.yaml mhome/CHANGELOG.md
             git commit -m "Release version $VERSION"
             git push
           fi
