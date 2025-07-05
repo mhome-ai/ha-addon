@@ -20,8 +20,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          # Personal access token with access to the private repository
-          token: ${{ secrets.SOURCE_REPO_PAT }}
 
       - name: Validate version format
         run: |
