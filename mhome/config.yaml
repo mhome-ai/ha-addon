@@ -1,6 +1,6 @@
 name: "mHome Hub"
 description: "mHome local hub integration"
-version: "0.1.0"
+version: "0.1.1"
 slug: "mhome"
 init: false
 arch:
