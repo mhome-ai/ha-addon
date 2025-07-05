@@ -58,7 +58,7 @@ jobs:
         id: version_check
         run: |
           VERSION="${{ github.event.inputs.version }}"
-          CURRENT_VERSION=$(grep "version:" config.yaml | cut -d'"' -f2)
+          CURRENT_VERSION=$(grep "version:" mhome/config.yaml | cut -d'"' -f2)
           
           echo "Current version: $CURRENT_VERSION"
           echo "Target version: $VERSION"
@@ -76,11 +76,11 @@ jobs:
         run: |
           VERSION="${{ github.event.inputs.version }}"
           
-          # Update version in config.yaml
-          sed -i "s/version: \".*\"/version: \"$VERSION\"/" config.yaml
+          # Update version in mhome/config.yaml
+          sed -i "s/version: \".*\"/version: \"$VERSION\"/" mhome/config.yaml
           
           # Verify the change
-          grep "version:" config.yaml
+          grep "version:" mhome/config.yaml
           
           echo "Updated addon configuration to version $VERSION"
 
@@ -93,7 +93,7 @@ jobs:
           
           # Only commit if there are changes
           if [ "${{ steps.version_check.outputs.needs_update }}" = "true" ]; then
-            git add config.yaml
+            git add mhome/config.yaml
             git commit -m "Release version $VERSION"
             git push
           fi

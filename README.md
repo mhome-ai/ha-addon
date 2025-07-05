@@ -1,7 +1,7 @@
 # mHome - Home Assistant Add-on
 
 <p align="center">
-  <img src="logo.png" alt="mHome Logo" width="200">
+  <img src="mhome/logo.png" alt="mHome Logo" width="200">
 </p>
 
 ![Supports aarch64 Architecture][aarch64-shield]

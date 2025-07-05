@@ -13,13 +13,7 @@ startup: application
 boot: auto
 auto_update: true
 ports:
-  9104/tcp: null
-ports_description:
-  9104/tcp: "mHome web interface"
-options:
-  port: 9104
-schema:
-  port: int(1024,65535)?
+  8080/tcp: null
 map:
   - "share:rw"
   - "ssl"
