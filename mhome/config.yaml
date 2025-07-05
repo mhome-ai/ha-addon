@@ -12,15 +12,11 @@ arch:
 startup: application
 boot: auto
 auto_update: true
-ports:
-  9104/tcp: null
-ports_description:
-  9104/tcp: "mHome web interface"
-options:
-  port: 9104
-schema:
-  port: int(1024,65535)?
 map:
   - "share:rw"
   - "ssl"
-image: "ghcr.io/mhome-ai/ha-addon" 
+image: "ghcr.io/mhome-ai/ha-addon"
+ingress: true
+ingress_port: 9104
+panel_icon: mdi:puzzle
+panel_title: mHome 
