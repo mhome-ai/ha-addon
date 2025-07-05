@@ -17,4 +17,4 @@ ports:
 map:
   - "share:rw"
   - "ssl"
-image: "ghcr.io/mhome-ai/ha-addon:{version}" 
+image: "ghcr.io/mhome-ai/ha-addon" 
