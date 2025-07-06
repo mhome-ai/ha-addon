@@ -19,4 +19,4 @@ image: "ghcr.io/mhome-ai/ha-addon"
 ingress: true
 ingress_port: 9104
 panel_title: mHome
-panel_icon: mdi:home 
+panel_icon: mdi:home-automation
